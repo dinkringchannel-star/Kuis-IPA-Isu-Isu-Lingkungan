@@ -379,7 +379,7 @@
 
   <script>
     // ====== 50 PERTANYAAN ======
-    const soal = [
+    const soalAsli = [
       {
         q: "Perubahan kondisi lingkungan yang menyebabkan dampak negatif terhadap kehidupan manusia dan makhluk hidup disebut...",
         o: [
@@ -954,6 +954,16 @@
 
     ];
 
+        // ====== FUNGSI ACAK (Fisher-Yates Shuffle) ======
+    function shuffleArray(arr) {
+      const shuffled = [...arr];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
     // ====== AUDIO SYSTEM ======
     let audioCtx = null;
 
@@ -1080,6 +1090,8 @@
 
     function mulaiKuis() {
       unlockAudio();
+            // Acak urutan soal setiap mulai kuis
+      soal = shuffleArray(soalAsli);
       if ('speechSynthesis' in window) {
         const u = new SpeechSynthesisUtterance(" ");
         speechSynthesis.speak(u);
