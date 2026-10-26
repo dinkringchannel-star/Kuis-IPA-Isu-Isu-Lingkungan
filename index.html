@@ -25,7 +25,7 @@
       padding: 20px 15px;
       font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
       color: #222;
-           -webkit-user-select: none;
+         -webkit-user-select: none;
       /* Safari */
       -ms-user-select: none;
       /* IE 10 dan lama */
@@ -343,7 +343,7 @@
   <div class="container" id="mainContainer">
     <div id="startScreen" class="start-screen">
       <h1>🌱 Kuis IPA Kelas 9</h1>
-      <p class="subtitle">Isu-Isu Lingkungan</p>
+      <p class="subtitle">Kuis Isu-Isu Lingkungan</p>
       <div class="info-box">
         <strong>📱 Info Penting untuk HP Android:</strong><br>
         • Pastikan <strong>volume media HP tidak silent/mute</strong><br>
@@ -357,7 +357,7 @@
     </div>
 
     <div id="quizScreen" class="hidden">
-      <h1>🌱 Isu-Isu Lingkungan</h1>
+      <h1>🌱 Kuis Isu-Isu Lingkungan</h1>
       <div class="info-bar">
         <span>Soal: <span id="qNum">1</span>/50</span>
         <span>Skor: <span id="score">2</span></span>
@@ -384,7 +384,8 @@
   </div>
 
   <script>
-     // ====== LAPORAN AKTIVITAS KE GOOGLE SPREADSHEET ======
+
+    // ====== LAPORAN AKTIVITAS KE GOOGLE SPREADSHEET ======
     // Ganti URL di bawah dengan URL Web App Google Apps Script yang berakhiran /exec.
     const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbx16OflbXEh-gNZKUOfq4y2sE_-vDGbrt75-xJF6PMRXWRuEy05ojiGSLRtRZ0HD-JpMA/exec";
 
@@ -432,10 +433,14 @@
 
     // Catat kunjungan ketika halaman dibuka.
     catatAktivitas("Halaman dibuka");
+
+
+
+
     
     // ====== 50 PERTANYAAN ======
     const soalAsli = [
-      {
+     {
         q: "Perubahan kondisi lingkungan yang menyebabkan dampak negatif terhadap kehidupan manusia dan makhluk hidup disebut...",
         o: [
           "Isu lingkungan",
@@ -1145,14 +1150,17 @@
 
     function mulaiKuis() {
       unlockAudio();
-            // Acak urutan soal setiap mulai kuis
+
+      // Acak urutan soal setiap mulai kuis
       soal = shuffleArray(soalAsli);
+
       if ('speechSynthesis' in window) {
         const u = new SpeechSynthesisUtterance(" ");
         speechSynthesis.speak(u);
       }
       document.getElementById('startScreen').classList.add('hidden');
       document.getElementById('quizScreen').classList.remove('hidden');
+      catatAktivitas("Mulai kuis");
       tampilkanSoal();
       if (!musikOn) toggleMusik();
     }
@@ -1287,11 +1295,19 @@
 
       document.getElementById('pesanAkhir').textContent = pesan;
 
+      // Skor pada kuis ini bertambah 2 poin per jawaban benar.
+      const jumlahJawabanBenar = Math.round(skor / 2);
+      catatAktivitas("Kuis selesai", {
+        skor: skor,
+        jumlahSoal: soal.length,
+        jawabanBenar: jumlahJawabanBenar
+      });
+
       if (skor >= 70) setTimeout(suaraBenar, 300);
       setTimeout(() => bicara("Kuis selesai. Skor kamu " + skor + " dari 100. " + pesan), 800);
     }
 
-        // 1. Matikan Klik Kanan
+    // 1. Matikan Klik Kanan
     document.addEventListener('contextmenu', event => event.preventDefault());
 
     // 2. Matikan Shortcut Keyboard (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U)
@@ -1308,7 +1324,7 @@
       if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U (View Source)
         return false;
       }
-}
+    }
   </script>
 </body>
 
